@@ -240,6 +240,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/ErrorHandler.o: src/ErrorHandler.cpp.o
+.PHONY : src/ErrorHandler.o
+
+# target to build an object file
+src/ErrorHandler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o
+.PHONY : src/ErrorHandler.cpp.o
+
+src/ErrorHandler.i: src/ErrorHandler.cpp.i
+.PHONY : src/ErrorHandler.i
+
+# target to preprocess a source file
+src/ErrorHandler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.i
+.PHONY : src/ErrorHandler.cpp.i
+
+src/ErrorHandler.s: src/ErrorHandler.cpp.s
+.PHONY : src/ErrorHandler.s
+
+# target to generate assembly for a file
+src/ErrorHandler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.s
+.PHONY : src/ErrorHandler.cpp.s
+
 src/FileExplorer.o: src/FileExplorer.cpp.o
 .PHONY : src/FileExplorer.o
 
@@ -408,6 +432,30 @@ src/TextEditor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/TextEditor.cpp.s
 .PHONY : src/TextEditor.cpp.s
 
+src/ThemeManager.o: src/ThemeManager.cpp.o
+.PHONY : src/ThemeManager.o
+
+# target to build an object file
+src/ThemeManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o
+.PHONY : src/ThemeManager.cpp.o
+
+src/ThemeManager.i: src/ThemeManager.cpp.i
+.PHONY : src/ThemeManager.i
+
+# target to preprocess a source file
+src/ThemeManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.i
+.PHONY : src/ThemeManager.cpp.i
+
+src/ThemeManager.s: src/ThemeManager.cpp.s
+.PHONY : src/ThemeManager.s
+
+# target to generate assembly for a file
+src/ThemeManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MultiTabEditor.dir/build.make CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.s
+.PHONY : src/ThemeManager.cpp.s
+
 src/Utils.o: src/Utils.cpp.o
 .PHONY : src/Utils.o
 
@@ -453,6 +501,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/ErrorHandler.o"
+	@echo "... src/ErrorHandler.i"
+	@echo "... src/ErrorHandler.s"
 	@echo "... src/FileExplorer.o"
 	@echo "... src/FileExplorer.i"
 	@echo "... src/FileExplorer.s"
@@ -474,6 +525,9 @@ help:
 	@echo "... src/TextEditor.o"
 	@echo "... src/TextEditor.i"
 	@echo "... src/TextEditor.s"
+	@echo "... src/ThemeManager.o"
+	@echo "... src/ThemeManager.i"
+	@echo "... src/ThemeManager.s"
 	@echo "... src/Utils.o"
 	@echo "... src/Utils.i"
 	@echo "... src/Utils.s"

@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/mocs_compilation.cpp" "CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/build/.rcc/qrc_application.cpp" "CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/main.cpp" "CMakeFiles/MultiTabEditor.dir/main.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/main.cpp.o.d"
+  "/home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp" "CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/FileExplorer.cpp" "CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/FindReplacePanel.cpp" "CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/MainWindow.cpp" "CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o.d"
@@ -19,6 +20,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/dingo/Programming/multi-tab-editor/src/SyntaxHighlighter.cpp" "CMakeFiles/MultiTabEditor.dir/src/SyntaxHighlighter.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/SyntaxHighlighter.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/TabWidget.cpp" "CMakeFiles/MultiTabEditor.dir/src/TabWidget.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/TabWidget.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/TextEditor.cpp" "CMakeFiles/MultiTabEditor.dir/src/TextEditor.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/TextEditor.cpp.o.d"
+  "/home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp" "CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o.d"
   "/home/dingo/Programming/multi-tab-editor/src/Utils.cpp" "CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o" "gcc" "CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o.d"
   )
 

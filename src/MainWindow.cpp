@@ -4,6 +4,7 @@
 #include "FileExplorer.h"
 #include "FindReplacePanel.h"
 #include "SettingsManager.h"
+#include "ThemeManager.h"
 #include "ErrorHandler.h"
 
 #include <QApplication>
@@ -23,6 +24,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QActionGroup>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_fileExplorer(nullptr)
     , m_findReplacePanel(nullptr)
     , m_settingsManager(nullptr)
+    , m_themeManager(nullptr)
     , m_fileExplorerDock(nullptr)
     , m_findReplaceDock(nullptr)
     , m_recentFilesMenu(nullptr)
@@ -41,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(800, 600);
     
     m_settingsManager = new SettingsManager(this);
+    m_themeManager = new ThemeManager(m_settingsManager, this);
+    
+    // Connect theme manager signals
+    connect(m_themeManager, &ThemeManager::themeChanged, this, &MainWindow::onThemeChanged);
     
     setupUI();
     createActions();
@@ -52,6 +59,9 @@ MainWindow::MainWindow(QWidget *parent)
     loadSettings();
     updateRecentFileActions();
     startAutoSaveTimer();
+    
+    // Load saved theme
+    m_themeManager->loadSavedTheme();
     
     // Check for crash recovery
     checkForCrashRecovery();
@@ -358,6 +368,27 @@ void MainWindow::toggleSessionRestore()
     m_sessionRestoreAction->setChecked(enabled);
 }
 
+void MainWindow::setLightTheme()
+{
+    if (m_themeManager) {
+        m_themeManager->setLightTheme();
+    }
+}
+
+void MainWindow::setDarkTheme()
+{
+    if (m_themeManager) {
+        m_themeManager->setDarkTheme();
+    }
+}
+
+void MainWindow::setAutoTheme()
+{
+    if (m_themeManager) {
+        m_themeManager->setAutoTheme();
+    }
+}
+
 void MainWindow::showPreferences()
 {
     // TODO: Implement preferences dialog
@@ -393,6 +424,14 @@ void MainWindow::onDocumentModified()
 {
     updateActions();
     updateWindowTitle();
+}
+
+void MainWindow::onThemeChanged(const QString &themeName)
+{
+    // Update theme action checked states
+    m_lightThemeAction->setChecked(themeName == "light");
+    m_darkThemeAction->setChecked(themeName == "dark");
+    m_autoThemeAction->setChecked(themeName == "auto");
 }
 
 void MainWindow::onFileChangedExternally(const QString &filePath)
@@ -545,6 +584,14 @@ void MainWindow::setupMenuBar()
     viewMenu->addSeparator();
     viewMenu->addAction(m_wordWrapAction);
     viewMenu->addAction(m_lineNumbersAction);
+    viewMenu->addSeparator();
+    
+    // Theme submenu
+    m_themeMenu = viewMenu->addMenu(tr("&Theme"));
+    m_themeMenu->addAction(m_lightThemeAction);
+    m_themeMenu->addAction(m_darkThemeAction);
+    m_themeMenu->addAction(m_autoThemeAction);
+    
     viewMenu->addSeparator();
     viewMenu->addAction(m_sessionRestoreAction);
     
@@ -705,6 +752,29 @@ void MainWindow::createActions()
     m_sessionRestoreAction->setChecked(m_settingsManager->loadRestoreSession());
     m_sessionRestoreAction->setStatusTip(tr("Automatically restore previous session when starting"));
     connect(m_sessionRestoreAction, &QAction::triggered, this, &MainWindow::toggleSessionRestore);
+    
+    // Theme actions
+    m_lightThemeAction = new QAction(tr("&Light Theme"), this);
+    m_lightThemeAction->setCheckable(true);
+    m_lightThemeAction->setStatusTip(tr("Switch to light theme"));
+    connect(m_lightThemeAction, &QAction::triggered, this, &MainWindow::setLightTheme);
+    
+    m_darkThemeAction = new QAction(tr("&Dark Theme"), this);
+    m_darkThemeAction->setCheckable(true);
+    m_darkThemeAction->setStatusTip(tr("Switch to dark theme"));
+    connect(m_darkThemeAction, &QAction::triggered, this, &MainWindow::setDarkTheme);
+    
+    m_autoThemeAction = new QAction(tr("&Auto Theme"), this);
+    m_autoThemeAction->setCheckable(true);
+    m_autoThemeAction->setStatusTip(tr("Automatically follow system theme"));
+    connect(m_autoThemeAction, &QAction::triggered, this, &MainWindow::setAutoTheme);
+    
+    // Create action group for theme actions (mutually exclusive)
+    QActionGroup *themeActionGroup = new QActionGroup(this);
+    themeActionGroup->addAction(m_lightThemeAction);
+    themeActionGroup->addAction(m_darkThemeAction);
+    themeActionGroup->addAction(m_autoThemeAction);
+    themeActionGroup->setExclusive(true);
     
     m_preferencesAction = new QAction(tr("&Preferences..."), this);
     m_preferencesAction->setStatusTip(tr("Open preferences dialog"));

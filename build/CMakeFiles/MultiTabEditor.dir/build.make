@@ -77,6 +77,8 @@ include CMakeFiles/MultiTabEditor.dir/flags.make
 .rcc/qrc_application.cpp: /home/dingo/Programming/multi-tab-editor/resources/icons/paste.png
 .rcc/qrc_application.cpp: /home/dingo/Programming/multi-tab-editor/resources/icons/undo.png
 .rcc/qrc_application.cpp: /home/dingo/Programming/multi-tab-editor/resources/icons/redo.png
+.rcc/qrc_application.cpp: /home/dingo/Programming/multi-tab-editor/resources/themes/light.qss
+.rcc/qrc_application.cpp: /home/dingo/Programming/multi-tab-editor/resources/themes/dark.qss
 .rcc/qrc_application.cpp: .rcc/application.qrc
 .rcc/qrc_application.cpp: /usr/lib/qt6/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running rcc for resource application"
@@ -215,10 +217,24 @@ CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dingo/Programming/multi-tab-editor/src/SettingsManager.cpp -o CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.s
 
+CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o: CMakeFiles/MultiTabEditor.dir/flags.make
+CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o: /home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp
+CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o: CMakeFiles/MultiTabEditor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o -MF CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o.d -o CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o -c /home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp
+
+CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp > CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.i
+
+CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp -o CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.s
+
 CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o: CMakeFiles/MultiTabEditor.dir/flags.make
 CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o: /home/dingo/Programming/multi-tab-editor/src/Utils.cpp
 CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o: CMakeFiles/MultiTabEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o -MF CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o.d -o CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o -c /home/dingo/Programming/multi-tab-editor/src/Utils.cpp
 
 CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.i: cmake_force
@@ -229,10 +245,24 @@ CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dingo/Programming/multi-tab-editor/src/Utils.cpp -o CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.s
 
+CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o: CMakeFiles/MultiTabEditor.dir/flags.make
+CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o: /home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp
+CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o: CMakeFiles/MultiTabEditor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o -MF CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o.d -o CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o -c /home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp
+
+CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp > CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.i
+
+CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp -o CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.s
+
 CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o: CMakeFiles/MultiTabEditor.dir/flags.make
 CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o: .rcc/qrc_application.cpp
 CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o: CMakeFiles/MultiTabEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o -MF CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o.d -o CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o -c /home/dingo/Programming/multi-tab-editor/build/.rcc/qrc_application.cpp
 
 CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.i: cmake_force
@@ -254,7 +284,9 @@ MultiTabEditor_OBJECTS = \
 "CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o" \
 "CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o" \
 "CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.o" \
+"CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o" \
 "CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o" \
+"CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o" \
 "CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o"
 
 # External object files for target MultiTabEditor
@@ -269,7 +301,9 @@ MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/SyntaxHighlighter.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.o
+MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/ThemeManager.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o
+MultiTabEditor: CMakeFiles/MultiTabEditor.dir/src/ErrorHandler.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/build.make
 MultiTabEditor: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.4.2
@@ -278,7 +312,7 @@ MultiTabEditor: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 MultiTabEditor: /usr/lib/x86_64-linux-gnu/libGLX.so
 MultiTabEditor: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 MultiTabEditor: CMakeFiles/MultiTabEditor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable MultiTabEditor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/dingo/Programming/multi-tab-editor/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable MultiTabEditor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MultiTabEditor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

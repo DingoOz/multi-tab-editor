@@ -8,6 +8,8 @@
     <file alias="resources/icons/paste.png">/home/dingo/Programming/multi-tab-editor/resources/icons/paste.png</file>
     <file alias="resources/icons/undo.png">/home/dingo/Programming/multi-tab-editor/resources/icons/undo.png</file>
     <file alias="resources/icons/redo.png">/home/dingo/Programming/multi-tab-editor/resources/icons/redo.png</file>
+    <file alias="resources/themes/light.qss">/home/dingo/Programming/multi-tab-editor/resources/themes/light.qss</file>
+    <file alias="resources/themes/dark.qss">/home/dingo/Programming/multi-tab-editor/resources/themes/dark.qss</file>
   </qresource>
 </RCC>
 

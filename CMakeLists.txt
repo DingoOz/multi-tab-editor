@@ -18,6 +18,7 @@ set(SOURCES
     src/FileExplorer.cpp
     src/FindReplacePanel.cpp
     src/SettingsManager.cpp
+    src/ThemeManager.cpp
     src/Utils.cpp
     src/ErrorHandler.cpp
 )
@@ -30,6 +31,7 @@ set(HEADERS
     src/FileExplorer.h
     src/FindReplacePanel.h
     src/SettingsManager.h
+    src/ThemeManager.h
     src/Utils.h
     src/ErrorHandler.h
 )
@@ -47,6 +49,8 @@ qt_add_resources(MultiTabEditor "application"
         resources/icons/paste.png
         resources/icons/undo.png
         resources/icons/redo.png
+        resources/themes/light.qss
+        resources/themes/dark.qss
 )
 
 target_link_libraries(MultiTabEditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui)

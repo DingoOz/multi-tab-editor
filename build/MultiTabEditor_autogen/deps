@@ -4,6 +4,8 @@ MultiTabEditor_autogen/timestamp: \
 	/home/dingo/Programming/multi-tab-editor/build/CMakeFiles/3.28.3/CMakeSystem.cmake \
 	/home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/moc_predefs.h \
 	/home/dingo/Programming/multi-tab-editor/main.cpp \
+	/home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp \
+	/home/dingo/Programming/multi-tab-editor/src/ErrorHandler.h \
 	/home/dingo/Programming/multi-tab-editor/src/FileExplorer.cpp \
 	/home/dingo/Programming/multi-tab-editor/src/FileExplorer.h \
 	/home/dingo/Programming/multi-tab-editor/src/FindReplacePanel.cpp \
@@ -18,6 +20,8 @@ MultiTabEditor_autogen/timestamp: \
 	/home/dingo/Programming/multi-tab-editor/src/TabWidget.h \
 	/home/dingo/Programming/multi-tab-editor/src/TextEditor.cpp \
 	/home/dingo/Programming/multi-tab-editor/src/TextEditor.h \
+	/home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp \
+	/home/dingo/Programming/multi-tab-editor/src/ThemeManager.h \
 	/home/dingo/Programming/multi-tab-editor/src/Utils.cpp \
 	/home/dingo/Programming/multi-tab-editor/src/Utils.h \
 	/usr/include/alloca.h \
@@ -324,8 +328,11 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
 	/usr/include/x86_64-linux-gnu/gnu/stubs.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QByteArray \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/QDateTime \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QDir \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/QFileSystemWatcher \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QHash \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QMimeData \
@@ -339,6 +346,7 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QSizeF \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/QTextStream \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/QUrl \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
@@ -366,15 +374,19 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcontainerinfo.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcontainertools_impl.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication_platform.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qdatastream.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qdebug.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qdiriterator.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/qeventloop.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qfiledevice.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtCore/qfilesystemwatcher.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qflags.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qforeach.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtCore/qgenericatomic.h \
@@ -475,9 +487,12 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qfontinfo.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qfontmetrics.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qglyphrun.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qicon.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qimage.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qinputdevice.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtGui/qinputmethod.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qpaintdevice.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qpainter.h \
@@ -508,6 +523,7 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qvector2d.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QCheckBox \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFileDialog \
@@ -537,6 +553,7 @@ MultiTabEditor_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
+	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h \
 	/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \

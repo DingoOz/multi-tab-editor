@@ -176,6 +176,12 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/dingo/Programming/multi-tab-editor/src/ErrorHandler.h",
+			"MU",
+			"UVLADIE3JM/moc_ErrorHandler.cpp",
+			null
+		],
+		[
 			"/home/dingo/Programming/multi-tab-editor/src/FileExplorer.h",
 			"MU",
 			"UVLADIE3JM/moc_FileExplorer.cpp",
@@ -215,6 +221,12 @@
 			"/home/dingo/Programming/multi-tab-editor/src/TextEditor.h",
 			"MU",
 			"UVLADIE3JM/moc_TextEditor.cpp",
+			null
+		],
+		[
+			"/home/dingo/Programming/multi-tab-editor/src/ThemeManager.h",
+			"MU",
+			"UVLADIE3JM/moc_ThemeManager.cpp",
 			null
 		],
 		[
@@ -287,6 +299,11 @@
 	[
 		[ "/home/dingo/Programming/multi-tab-editor/main.cpp", "MU", null ],
 		[
+			"/home/dingo/Programming/multi-tab-editor/src/ErrorHandler.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/dingo/Programming/multi-tab-editor/src/FileExplorer.cpp",
 			"MU",
 			null
@@ -318,6 +335,11 @@
 		],
 		[
 			"/home/dingo/Programming/multi-tab-editor/src/TextEditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/dingo/Programming/multi-tab-editor/src/ThemeManager.cpp",
 			"MU",
 			null
 		],
