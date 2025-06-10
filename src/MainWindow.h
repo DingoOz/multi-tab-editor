@@ -13,13 +13,15 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QSettings>
+#include <QTimer>
 #include <memory>
+
+#include "SettingsManager.h"
 
 class TabWidget;
 class TextEditor;
 class FileExplorer;
 class FindReplacePanel;
-class SettingsManager;
 
 class MainWindow : public QMainWindow
 {
@@ -57,13 +59,18 @@ private slots:
     void resetZoom();
     void toggleWordWrap();
     void toggleLineNumbers();
+    void toggleSessionRestore();
     
     void showPreferences();
     void showAbout();
     
+    void openRecentFile();
+    void clearRecentFiles();
+    
     void onTabChanged(int index);
     void onTabCloseRequested(int index);
     void onDocumentModified();
+    void onFileChangedExternally(const QString &filePath);
 
 private:
     void setupUI();
@@ -75,6 +82,17 @@ private:
     void updateActions();
     void updateWindowTitle();
     void updateStatusBar();
+    void updateRecentFileActions();
+    
+    // Session Management
+    void saveSession();
+    void restoreSession();
+    SessionData getCurrentSession() const;
+    void autoSaveAllTabs();
+    void startAutoSaveTimer();
+    void checkMemoryUsage();
+    void createCrashRecoveryBackup();
+    void checkForCrashRecovery();
     
     bool maybeSave();
     bool saveDocument(int index);
@@ -112,7 +130,18 @@ private:
     QAction *m_resetZoomAction;
     QAction *m_wordWrapAction;
     QAction *m_lineNumbersAction;
+    QAction *m_sessionRestoreAction;
     
     QAction *m_preferencesAction;
     QAction *m_aboutAction;
+    
+    QMenu *m_recentFilesMenu;
+    QAction *m_clearRecentFilesAction;
+    QList<QAction*> m_recentFileActions;
+    
+    QTimer *m_autoSaveTimer;
+    QTimer *m_memoryCheckTimer;
+    
+    static const int MAX_RECENT_FILES = 10;
+    static const int AUTO_SAVE_INTERVAL = 30000; // 30 seconds
 };

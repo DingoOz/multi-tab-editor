@@ -10,6 +10,21 @@
 #include <QPoint>
 #include <QByteArray>
 
+struct SessionTab {
+    QString filePath;
+    QString content;    // For unsaved files
+    bool isModified;
+    int cursorPosition;
+    bool isUntitled;
+    QString untitledName;
+};
+
+struct SessionData {
+    QList<SessionTab> tabs;
+    int currentTabIndex;
+    bool restoreSession;
+};
+
 class SettingsManager : public QObject
 {
     Q_OBJECT
@@ -55,6 +70,20 @@ public:
     
     void saveSyntaxHighlighting(bool enabled);
     bool loadSyntaxHighlighting() const;
+    
+    // Session Management
+    void saveSession(const SessionData &sessionData);
+    SessionData loadSession() const;
+    void clearSession();
+    
+    void saveRestoreSession(bool enabled);
+    bool loadRestoreSession() const;
+    
+    // Auto-save for unsaved files
+    void saveAutoSaveContent(const QString &tabId, const QString &content);
+    QString loadAutoSaveContent(const QString &tabId) const;
+    void clearAutoSaveContent(const QString &tabId);
+    QStringList getAutoSaveFiles() const;
 
 signals:
     void settingsChanged();

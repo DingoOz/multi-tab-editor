@@ -1,0 +1,73 @@
+This is a test file for the enhanced error handling features.
+
+New Error Handling Features:
+===========================
+
+1. DETAILED ERROR MESSAGES
+   - Specific error types (permissions, disk full, file not found, etc.)
+   - Recovery suggestions for each error type
+   - File path information for debugging
+   - Retry/Ignore/Cancel options
+
+2. LARGE FILE WARNINGS
+   - Warning at 50MB+ (large file)
+   - Strong warning at 200MB+ (huge file)
+   - Memory usage estimates
+   - Performance impact warnings
+
+3. FILE CHANGE DETECTION
+   - Monitors files for external changes
+   - Notifies when files are modified outside the editor
+   - Offers to reload from disk
+   - Handles file deletion gracefully
+
+4. MEMORY MONITORING
+   - Checks available system memory every minute
+   - Warns when memory gets critically low (<50MB)
+   - Forces auto-save when memory is low
+   - Provides memory usage information
+
+5. CRASH RECOVERY
+   - Creates recovery backups every 30 seconds
+   - Detects improper shutdowns
+   - Offers to restore previous session
+   - Saves all tab content and cursor positions
+
+6. IMPROVED FILE VALIDATION
+   - Checks file permissions before operations
+   - Validates file paths and directories
+   - Monitors disk space availability
+   - Creates directories if needed
+
+Testing Instructions:
+====================
+
+To test these features:
+
+1. Large File Warning:
+   - Try opening a file larger than 50MB
+   
+2. File Change Detection:
+   - Open a file in the editor
+   - Modify it in another program
+   - See the notification in the editor
+
+3. Memory Monitoring:
+   - Monitor the editor during heavy usage
+   - Low memory warnings appear automatically
+
+4. Crash Recovery:
+   - Open several files
+   - Force-quit the application
+   - Restart to see recovery prompt
+
+5. Error Handling:
+   - Try to open non-existent files
+   - Try to save to read-only locations
+   - Test various permission scenarios
+
+All error messages now provide:
+- Clear descriptions of what went wrong
+- Specific suggestions for fixing the problem
+- Retry options where appropriate
+- Better user experience overall

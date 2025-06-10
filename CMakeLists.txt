@@ -19,6 +19,7 @@ set(SOURCES
     src/FindReplacePanel.cpp
     src/SettingsManager.cpp
     src/Utils.cpp
+    src/ErrorHandler.cpp
 )
 
 set(HEADERS
@@ -30,6 +31,7 @@ set(HEADERS
     src/FindReplacePanel.h
     src/SettingsManager.h
     src/Utils.h
+    src/ErrorHandler.h
 )
 
 qt_add_executable(MultiTabEditor ${SOURCES} ${HEADERS})

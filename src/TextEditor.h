@@ -14,6 +14,8 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QTimer>
+#include <QFileSystemWatcher>
+#include <QDateTime>
 #include <memory>
 
 class SyntaxHighlighter;
@@ -54,10 +56,12 @@ public slots:
     void highlightCurrentLine();
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &rect, int dy);
+    void onFileChanged(const QString &path);
 
 signals:
     void modificationChanged(bool changed);
     void cursorPositionChanged(int line, int column);
+    void fileChangedExternally(const QString &filePath);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
@@ -86,6 +90,8 @@ private:
     SyntaxHighlighter *m_syntaxHighlighter;
     QCompleter *m_completer;
     QTimer *m_cursorTimer;
+    QFileSystemWatcher *m_fileWatcher;
+    QDateTime m_lastModified;
 };
 
 class LineNumberArea : public QWidget
