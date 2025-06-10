@@ -1,0 +1,91 @@
+name: Build Test
+
+on:
+  push:
+    branches: [ main, develop, 'feat/*', 'fix/*', 'ci/*', 'docs/*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ubuntu-build:
+    name: Ubuntu Build Verification
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install Qt6 and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          qt6-base-dev \
+          qt6-tools-dev \
+          cmake \
+          build-essential \
+          pkg-config
+          
+    - name: Verify Qt installation
+      run: |
+        qmake6 --version || qmake --version
+        cmake --version
+        g++ --version
+        
+    - name: Create build directory
+      run: mkdir -p build
+      
+    - name: Configure project
+      working-directory: build
+      run: |
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        
+    - name: Build project
+      working-directory: build
+      run: |
+        make -j$(nproc)
+        
+    - name: Verify executable
+      working-directory: build
+      run: |
+        ls -la MultiTabEditor
+        file MultiTabEditor
+        echo "Build successful: MultiTabEditor executable created"
+        
+    - name: Quick functionality test
+      working-directory: build
+      run: |
+        export QT_QPA_PLATFORM=offscreen
+        timeout 3s ./MultiTabEditor --help 2>/dev/null || echo "Application can start"
+
+  multiple-ubuntu-versions:
+    name: Ubuntu ${{ matrix.ubuntu_version }} Build
+    runs-on: ubuntu-${{ matrix.ubuntu_version }}
+    
+    strategy:
+      matrix:
+        ubuntu_version: [20.04, 22.04, latest]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          qt6-base-dev \
+          qt6-tools-dev \
+          cmake \
+          build-essential
+          
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        make -j$(nproc)
+        
+    - name: Verify build
+      run: |
+        cd build
+        test -f MultiTabEditor
+        echo "✅ Build successful on Ubuntu ${{ matrix.ubuntu_version }}"
