@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['checkdiskspace_0',['checkDiskSpace',['../classErrorHandler.html#aaf7f62df92e362f5bf9121014b227531',1,'ErrorHandler']]],
+  ['checkfilepermissions_1',['checkFilePermissions',['../classErrorHandler.html#a1514ea816961b2dbccb6198cc57a14f8',1,'ErrorHandler']]],
+  ['checkfilesizewarning_2',['checkFileSizeWarning',['../classErrorHandler.html#a89453c6bdfcbbf184b7c49053e642175',1,'ErrorHandler']]],
+  ['checkmemoryusage_3',['checkMemoryUsage',['../classErrorHandler.html#a5685cf7a0aab58614d9611489377c2e8',1,'ErrorHandler']]],
+  ['clearautosavecontent_4',['clearAutoSaveContent',['../classSettingsManager.html#aeab1d258cddcfe9c672e46fd27f52e72',1,'SettingsManager']]],
+  ['clearsession_5',['clearSession',['../classSettingsManager.html#aed81a54848b852e45fdd95c73552e304',1,'SettingsManager']]],
+  ['closealltabs_6',['closeAllTabs',['../classTabWidget.html#aea60dd24489c7035c541e5b814a5d3a2',1,'TabWidget']]],
+  ['closeevent_7',['closeEvent',['../classMainWindow.html#a05fb9d72c044aa3bb7d187b994704e2f',1,'MainWindow']]],
+  ['closetab_8',['closeTab',['../classTabWidget.html#ac89ab42753f23253044f91d9bc4fd0a9',1,'TabWidget']]],
+  ['contextmenuevent_9',['contextmenuevent',['../classTabWidget.html#ac8eb104dff0607418a9dd992127fc0be',1,'TabWidget::contextMenuEvent()'],['../classTextEditor.html#af9dfe09b325c0666f4a946c6484c284a',1,'TextEditor::contextMenuEvent()']]],
+  ['copytoclipboard_10',['copyToClipboard',['../namespaceUtils.html#a6c2e23ee4a89aaa0eeb52fc1635889a6',1,'Utils']]],
+  ['countcharacters_11',['countCharacters',['../namespaceUtils.html#a644fc405920ed05ea79424984e8e3691',1,'Utils']]],
+  ['countlines_12',['countLines',['../namespaceUtils.html#aa85881d199f456633ba089280560ad87',1,'Utils']]],
+  ['countwords_13',['countWords',['../namespaceUtils.html#a53d1b537b18ba18438208034b040e1d6',1,'Utils']]],
+  ['currenteditor_14',['currentEditor',['../classTabWidget.html#a41e87e027078a3e1201c4d5ed7ad5d6a',1,'TabWidget']]],
+  ['currenteditorchanged_15',['currentEditorChanged',['../classTabWidget.html#affbac532f8c37f9cee0a819af1a659f7',1,'TabWidget']]],
+  ['cursorpositionchanged_16',['cursorPositionChanged',['../classTextEditor.html#a8854b171f22dc09354739a5ccc13d18f',1,'TextEditor']]]
+];
