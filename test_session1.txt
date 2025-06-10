@@ -1,0 +1,8 @@
+This is test file 1 for session restore.
+
+You can use this to test the session restore functionality:
+1. Open this file and test_session2.txt
+2. Make some modifications to both
+3. Close the application
+4. Restart the application
+5. Both files should reopen with your modifications intact!

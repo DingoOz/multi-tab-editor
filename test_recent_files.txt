@@ -1,0 +1,14 @@
+This is a test file to verify recent files functionality.
+
+You can open this file in the Multi-Tab Editor to test:
+1. Open this file via File > Open
+2. Close the file
+3. Check File > Recent Files menu
+4. This file should appear in the recent files list
+
+The recent files menu should:
+- Show up to 10 recently opened files
+- Display file names with keyboard shortcuts (&1, &2, etc.)
+- Show full file paths in status tips
+- Have a "Clear Recent Files" option at the bottom
+- Be grayed out when no recent files exist

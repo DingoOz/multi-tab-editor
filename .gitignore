@@ -1,0 +1,60 @@
+# Build directories
+build/
+*.build/
+cmake-build-*/
+
+# Qt generated files
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*_autogen/
+
+# Compiled binaries
+MultiTabEditor
+*.exe
+*.app
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDE files
+.vscode/
+.idea/
+*.creator
+*.creator.*
+*.pro.user*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*.swo
+*~
+
+# Object files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+
+# Archive files
+*.a
+*.lib
+
+# Log files
+*.log
+
+# Temporary files
+*.backup
+*.bak
+*.orig
+
+# Auto-save and recovery files
+*_recovery.*
+.auto-save-*
