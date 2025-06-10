@@ -519,6 +519,10 @@ CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QContextMenuEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileSystemWatcher \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfilesystemwatcher.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QDateTime \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
  /home/dingo/Programming/multi-tab-editor/src/FileExplorer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTreeView \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreeview.h \
@@ -556,6 +560,7 @@ CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpicture.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /home/dingo/Programming/multi-tab-editor/src/ThemeManager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \
@@ -564,5 +569,16 @@ CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qinputmethod.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QTextStream \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qtextstream.h \
+ /home/dingo/Programming/multi-tab-editor/src/ErrorHandler.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QStorageInfo \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstorageinfo.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStandardPaths \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QActionGroup \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qactiongroup.h

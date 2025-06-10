@@ -6,3 +6,4 @@
 #include "UVLADIE3JM/moc_SyntaxHighlighter.cpp"
 #include "UVLADIE3JM/moc_TabWidget.cpp"
 #include "UVLADIE3JM/moc_TextEditor.cpp"
+#include "UVLADIE3JM/moc_ThemeManager.cpp"

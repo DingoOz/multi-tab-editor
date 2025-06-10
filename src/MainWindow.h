@@ -29,6 +29,7 @@ class TabWidget;
 class TextEditor;
 class FileExplorer;
 class FindReplacePanel;
+class ThemeManager;
 
 /**
  * @class MainWindow
@@ -153,6 +154,15 @@ private slots:
     /** @brief Toggles session restore functionality on/off */
     void toggleSessionRestore();
     
+    /** @brief Switches to light theme */
+    void setLightTheme();
+    
+    /** @brief Switches to dark theme */
+    void setDarkTheme();
+    
+    /** @brief Switches to automatic theme */
+    void setAutoTheme();
+    
     /** @brief Opens the preferences dialog (placeholder) */
     void showPreferences();
     
@@ -185,6 +195,12 @@ private slots:
      * @param filePath Path of the file that changed externally
      */
     void onFileChangedExternally(const QString &filePath);
+    
+    /**
+     * @brief Handles theme change notifications
+     * @param themeName Name of the new theme
+     */
+    void onThemeChanged(const QString &themeName);
 
 private:
     /** @brief Sets up the main UI layout and central widget */
@@ -277,6 +293,9 @@ private:
     /** @brief Settings manager for persistent configuration */
     SettingsManager *m_settingsManager;
     
+    /** @brief Theme manager for UI themes and switching */
+    ThemeManager *m_themeManager;
+    
     // Dock Widgets
     /** @brief Dock widget container for file explorer */
     QDockWidget *m_fileExplorerDock;
@@ -352,6 +371,19 @@ private:
     
     /** @brief Action for toggling session restore functionality */
     QAction *m_sessionRestoreAction;
+    
+    // Theme Menu Actions
+    /** @brief Action for switching to light theme */
+    QAction *m_lightThemeAction;
+    
+    /** @brief Action for switching to dark theme */
+    QAction *m_darkThemeAction;
+    
+    /** @brief Action for switching to automatic theme */
+    QAction *m_autoThemeAction;
+    
+    /** @brief Menu for theme selection */
+    QMenu *m_themeMenu;
     
     // Help Menu Actions
     /** @brief Action for opening preferences dialog */
