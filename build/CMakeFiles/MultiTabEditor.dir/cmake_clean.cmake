@@ -1,0 +1,37 @@
+file(REMOVE_RECURSE
+  ".rcc/qrc_application.cpp"
+  "CMakeFiles/MultiTabEditor_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/MultiTabEditor_autogen.dir/ParseCache.txt"
+  "MultiTabEditor_autogen"
+  "CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/build/.rcc/qrc_application.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/main.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/main.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/FileExplorer.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/FindReplacePanel.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/MainWindow.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/SettingsManager.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/SyntaxHighlighter.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/SyntaxHighlighter.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/TabWidget.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/TabWidget.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/TextEditor.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/TextEditor.cpp.o.d"
+  "CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o"
+  "CMakeFiles/MultiTabEditor.dir/src/Utils.cpp.o.d"
+  "MultiTabEditor"
+  "MultiTabEditor.pdb"
+  "MultiTabEditor_autogen/mocs_compilation.cpp"
+  "MultiTabEditor_autogen/timestamp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/MultiTabEditor.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

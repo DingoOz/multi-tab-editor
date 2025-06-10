@@ -1,0 +1,63 @@
+/* Dark Theme */
+QMainWindow {
+    background-color: #2d2d2d;
+    color: #ffffff;
+}
+
+QMenuBar {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+    color: #ffffff;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 8px;
+    color: #ffffff;
+}
+
+QMenuBar::item:selected {
+    background-color: #505050;
+}
+
+QToolBar {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+}
+
+QTabWidget::pane {
+    border: 1px solid #555555;
+    background-color: #2d2d2d;
+}
+
+QTabBar::tab {
+    background-color: #404040;
+    border: 1px solid #555555;
+    padding: 6px 12px;
+    margin-right: 2px;
+    color: #ffffff;
+}
+
+QTabBar::tab:selected {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #2d2d2d;
+}
+
+QTextEdit {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #555555;
+    selection-background-color: #3399ff;
+}
+
+QDockWidget {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+    color: #ffffff;
+}
+
+QStatusBar {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+    color: #ffffff;
+}
