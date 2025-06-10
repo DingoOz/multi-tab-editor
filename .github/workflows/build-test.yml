@@ -35,12 +35,17 @@ jobs:
         cmake --version
         g++ --version
         
-    - name: Create build directory
-      run: mkdir -p build
-      
-    - name: Configure project
-      working-directory: build
+    - name: Check workspace structure
       run: |
+        pwd
+        ls -la
+        echo "Looking for CMakeLists.txt:"
+        find . -name "CMakeLists.txt" -type f
+        
+    - name: Configure project
+      run: |
+        mkdir -p build
+        cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         
     - name: Build project
@@ -89,9 +94,17 @@ jobs:
         qmake6 --version || qmake --version
         g++ --version
         
+    - name: Check workspace structure
+      run: |
+        pwd
+        ls -la
+        echo "Looking for CMakeLists.txt:"
+        find . -name "CMakeLists.txt" -type f
+        
     - name: Build
       run: |
-        mkdir build && cd build
+        mkdir -p build
+        cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j$(nproc)
         
