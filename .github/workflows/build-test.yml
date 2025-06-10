@@ -15,10 +15,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: Install Qt6 and dependencies
+    - name: Update package cache
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+        sudo apt-get update --fix-missing
+        
+    - name: Install Qt6 and dependencies
+      timeout-minutes: 10
+      run: |
+        sudo apt-get install -y --no-install-recommends \
           qt6-base-dev \
           qt6-tools-dev \
           cmake \
@@ -63,21 +67,32 @@ jobs:
     
     strategy:
       matrix:
-        ubuntu_version: [20.04, 22.04, latest]
+        ubuntu_version: [22.04, latest]
         
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: Install dependencies
+    - name: Update package cache
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+        sudo apt-get update --fix-missing
+        
+    - name: Install dependencies with timeout protection
+      timeout-minutes: 10
+      run: |
+        sudo apt-get install -y --no-install-recommends \
           qt6-base-dev \
           qt6-tools-dev \
           cmake \
-          build-essential
+          build-essential \
+          pkg-config
           
+    - name: Verify installations
+      run: |
+        cmake --version
+        qmake6 --version || qmake --version
+        g++ --version
+        
     - name: Build
       run: |
         mkdir build && cd build
