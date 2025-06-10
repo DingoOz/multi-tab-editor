@@ -1,0 +1,10 @@
+This is test file 2 for session restore.
+
+Session restore features:
+- Auto-saves every 30 seconds
+- Restores all open tabs on startup
+- Preserves cursor positions
+- Handles both saved and unsaved files
+- Maintains tab order and current tab selection
+
+Try creating some untitled tabs too!
