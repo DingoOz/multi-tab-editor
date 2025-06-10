@@ -513,7 +513,9 @@ CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmessagebox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QSettings \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsettings.h \
- /home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/UVLADIE3JM/moc_SettingsManager.cpp \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
  /home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/UVLADIE3JM/../../../src/SettingsManager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
@@ -529,6 +531,7 @@ CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QByteArray \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
+ /home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/UVLADIE3JM/moc_SettingsManager.cpp \
  /home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/UVLADIE3JM/moc_SyntaxHighlighter.cpp \
  /home/dingo/Programming/multi-tab-editor/build/MultiTabEditor_autogen/UVLADIE3JM/../../../src/SyntaxHighlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QSyntaxHighlighter \
@@ -569,7 +572,4 @@ CMakeFiles/MultiTabEditor.dir/MultiTabEditor_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextBlock \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QScrollBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qscrollbar.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent
