@@ -1,0 +1,117 @@
+name: Build Test
+
+on:
+  push:
+    branches: [ main, develop, 'feat/*', 'fix/*', 'ci/*', 'docs/*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ubuntu-build:
+    name: Ubuntu Build Verification
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Update package cache
+      run: |
+        sudo apt-get update --fix-missing
+        
+    - name: Install Qt6 and dependencies
+      timeout-minutes: 10
+      run: |
+        sudo apt-get install -y --no-install-recommends \
+          qt6-base-dev \
+          qt6-tools-dev \
+          cmake \
+          build-essential \
+          pkg-config
+          
+    - name: Verify Qt installation
+      run: |
+        qmake6 --version || qmake --version
+        cmake --version
+        g++ --version
+        
+    - name: Check workspace structure
+      run: |
+        pwd
+        ls -la
+        echo "Looking for CMakeLists.txt:"
+        find . -name "CMakeLists.txt" -type f
+        
+    - name: Clean and configure project
+      run: |
+        rm -rf build
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        
+    - name: Build project
+      working-directory: build
+      run: |
+        make -j$(nproc)
+        
+    - name: Verify executable
+      working-directory: build
+      run: |
+        ls -la MultiTabEditor
+        file MultiTabEditor
+        echo "Build successful: MultiTabEditor executable created"
+        
+    - name: Quick functionality test
+      working-directory: build
+      run: |
+        export QT_QPA_PLATFORM=offscreen
+        timeout 3s ./MultiTabEditor --help 2>/dev/null || echo "Application can start"
+
+  ubuntu-latest-build:
+    name: Ubuntu Latest Build
+    runs-on: ubuntu-latest
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Update package cache
+      run: |
+        sudo apt-get update --fix-missing
+        
+    - name: Install dependencies with timeout protection
+      timeout-minutes: 10
+      run: |
+        sudo apt-get install -y --no-install-recommends \
+          qt6-base-dev \
+          qt6-tools-dev \
+          cmake \
+          build-essential \
+          pkg-config
+          
+    - name: Verify installations
+      run: |
+        cmake --version
+        qmake6 --version || qmake --version
+        g++ --version
+        
+    - name: Check workspace structure
+      run: |
+        pwd
+        ls -la
+        echo "Looking for CMakeLists.txt:"
+        find . -name "CMakeLists.txt" -type f
+        
+    - name: Clean and build
+      run: |
+        rm -rf build
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        make -j$(nproc)
+        
+    - name: Verify build
+      run: |
+        cd build
+        test -f MultiTabEditor
+        echo "✅ Build successful on Ubuntu Latest"

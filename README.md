@@ -2,6 +2,7 @@
 
 A modern text editor built with Qt 6 and C++20.
 
+![Build Status](https://github.com/DingoOz/multi-tab-editor/workflows/Build%20Test/badge.svg)
 ![Qt Version](https://img.shields.io/badge/Qt-6.4+-blue)
 ![C++ Standard](https://img.shields.io/badge/C++-20-orange)
 
