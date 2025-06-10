@@ -42,9 +42,10 @@ jobs:
         echo "Looking for CMakeLists.txt:"
         find . -name "CMakeLists.txt" -type f
         
-    - name: Configure project
+    - name: Clean and configure project
       run: |
-        mkdir -p build
+        rm -rf build
+        mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         
@@ -101,9 +102,10 @@ jobs:
         echo "Looking for CMakeLists.txt:"
         find . -name "CMakeLists.txt" -type f
         
-    - name: Build
+    - name: Clean and build
       run: |
-        mkdir -p build
+        rm -rf build
+        mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j$(nproc)
