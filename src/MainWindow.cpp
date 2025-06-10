@@ -4,6 +4,7 @@
 #include "FileExplorer.h"
 #include "FindReplacePanel.h"
 #include "SettingsManager.h"
+#include "ErrorHandler.h"
 
 #include <QApplication>
 #include <QMenuBar>
@@ -20,6 +21,8 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
+#include <QFileInfo>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,6 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
     , m_settingsManager(nullptr)
     , m_fileExplorerDock(nullptr)
     , m_findReplaceDock(nullptr)
+    , m_recentFilesMenu(nullptr)
+    , m_clearRecentFilesAction(nullptr)
+    , m_autoSaveTimer(nullptr)
+    , m_memoryCheckTimer(nullptr)
 {
     setWindowTitle("Multi-Tab Editor");
     setMinimumSize(800, 600);
@@ -43,8 +50,23 @@ MainWindow::MainWindow(QWidget *parent)
     setupDockWidgets();
     
     loadSettings();
+    updateRecentFileActions();
+    startAutoSaveTimer();
     
-    newFile();
+    // Check for crash recovery
+    checkForCrashRecovery();
+    
+    // Start memory monitoring
+    m_memoryCheckTimer = new QTimer(this);
+    connect(m_memoryCheckTimer, &QTimer::timeout, this, &MainWindow::checkMemoryUsage);
+    m_memoryCheckTimer->start(60000); // Check every minute
+    
+    // Restore session if enabled
+    if (m_settingsManager->loadRestoreSession()) {
+        restoreSession();
+    } else {
+        newFile();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -55,6 +77,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (maybeSave()) {
+        saveSession();
         saveSettings();
         event->accept();
     } else {
@@ -85,15 +108,46 @@ void MainWindow::openFile()
 
 void MainWindow::openFile(const QString &filePath)
 {
+    // Validate file path
+    if (!ErrorHandler::validateFilePath(this, filePath)) {
+        return;
+    }
+    
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists()) {
-        QMessageBox::warning(this, tr("Warning"), tr("File does not exist: %1").arg(filePath));
+        bool retry = ErrorHandler::handleFileError(this, filePath, "File not found", 
+                                                  ErrorHandler::FileOperation::Opening,
+                                                  ErrorHandler::ErrorType::FileNotFound);
+        if (!retry) return;
+        
+        // Check again after user action
+        if (!QFileInfo(filePath).exists()) {
+            return;
+        }
+    }
+    
+    // Check file size before opening
+    if (!ErrorHandler::checkFileSizeWarning(this, filePath)) {
+        return;
+    }
+    
+    // Check file permissions
+    if (!ErrorHandler::checkFilePermissions(this, filePath, false)) {
+        return;
+    }
+    
+    // Check memory before loading large files
+    if (!ErrorHandler::checkMemoryUsage(this)) {
         return;
     }
     
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, tr("Warning"), tr("Cannot read file %1:\n%2").arg(filePath, file.errorString()));
+        bool retry = ErrorHandler::handleFileError(this, filePath, file.errorString(),
+                                                  ErrorHandler::FileOperation::Opening);
+        if (retry) {
+            openFile(filePath); // Retry
+        }
         return;
     }
     
@@ -105,11 +159,15 @@ void MainWindow::openFile(const QString &filePath)
     editor->setFilePath(filePath);
     editor->setModified(false);
     
+    // Connect file change detection
+    connect(editor, &TextEditor::fileChangedExternally, this, &MainWindow::onFileChangedExternally);
+    
     int index = m_tabWidget->addTab(editor, fileInfo.fileName());
     m_tabWidget->setCurrentIndex(index);
     
     m_settingsManager->addRecentFile(filePath);
     m_settingsManager->saveLastOpenDirectory(fileInfo.absolutePath());
+    updateRecentFileActions();
     
     updateActions();
 }
@@ -167,6 +225,28 @@ void MainWindow::closeAllTabs()
 void MainWindow::exitApplication()
 {
     close();
+}
+
+void MainWindow::openRecentFile()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action) {
+        QString filePath = action->data().toString();
+        if (QFile::exists(filePath)) {
+            openFile(filePath);
+        } else {
+            QMessageBox::warning(this, tr("File Not Found"),
+                tr("The file %1 could not be found.").arg(filePath));
+            m_settingsManager->removeRecentFile(filePath);
+            updateRecentFileActions();
+        }
+    }
+}
+
+void MainWindow::clearRecentFiles()
+{
+    m_settingsManager->saveRecentFiles(QStringList());
+    updateRecentFileActions();
 }
 
 void MainWindow::undo()
@@ -271,6 +351,13 @@ void MainWindow::toggleLineNumbers()
     }
 }
 
+void MainWindow::toggleSessionRestore()
+{
+    bool enabled = !m_settingsManager->loadRestoreSession();
+    m_settingsManager->saveRestoreSession(enabled);
+    m_sessionRestoreAction->setChecked(enabled);
+}
+
 void MainWindow::showPreferences()
 {
     // TODO: Implement preferences dialog
@@ -308,6 +395,92 @@ void MainWindow::onDocumentModified()
     updateWindowTitle();
 }
 
+void MainWindow::onFileChangedExternally(const QString &filePath)
+{
+    // Find the editor with this file path
+    TextEditor *editor = nullptr;
+    int tabIndex = -1;
+    
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        TextEditor *ed = m_tabWidget->editorAt(i);
+        if (ed && ed->filePath() == filePath) {
+            editor = ed;
+            tabIndex = i;
+            break;
+        }
+    }
+    
+    if (!editor) {
+        return;
+    }
+    
+    // Check if file still exists
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists()) {
+        QMessageBox::StandardButton result = QMessageBox::warning(
+            this,
+            tr("File Deleted"),
+            tr("The file '%1' has been deleted by another application.\n\n"
+               "Do you want to save the current content to a new location?")
+                .arg(QFileInfo(filePath).fileName()),
+            QMessageBox::Save | QMessageBox::Discard,
+            QMessageBox::Save
+        );
+        
+        if (result == QMessageBox::Save) {
+            // Clear the file path and trigger Save As
+            editor->setFilePath("");
+            saveFileAs();
+        } else {
+            // Mark as modified since file is gone
+            editor->setModified(true);
+            m_tabWidget->setTabModified(tabIndex, true);
+        }
+        return;
+    }
+    
+    // File exists but was modified
+    QMessageBox::StandardButton result = QMessageBox::question(
+        this,
+        tr("File Changed"),
+        tr("The file '%1' has been modified by another application.\n\n"
+           "Do you want to reload the file from disk?\n\n"
+           "Warning: Any unsaved changes will be lost.")
+            .arg(QFileInfo(filePath).fileName()),
+        QMessageBox::Yes | QMessageBox::No,
+        QMessageBox::No
+    );
+    
+    if (result == QMessageBox::Yes) {
+        // Reload the file
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            QString content = in.readAll();
+            
+            // Save cursor position
+            QTextCursor cursor = editor->textCursor();
+            int position = cursor.position();
+            
+            // Reload content
+            editor->setPlainText(content);
+            editor->setModified(false);
+            m_tabWidget->setTabModified(tabIndex, false);
+            
+            // Restore cursor position (if still valid)
+            cursor = editor->textCursor();
+            cursor.setPosition(qMin(position, editor->document()->characterCount()));
+            editor->setTextCursor(cursor);
+            
+            // Re-add to file watcher
+            editor->setFilePath(filePath);
+        } else {
+            ErrorHandler::handleFileError(this, filePath, file.errorString(),
+                                        ErrorHandler::FileOperation::Opening);
+        }
+    }
+}
+
 void MainWindow::setupUI()
 {
     m_tabWidget = new TabWidget(this);
@@ -325,6 +498,21 @@ void MainWindow::setupMenuBar()
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
     fileMenu->addAction(m_newAction);
     fileMenu->addAction(m_openAction);
+    
+    // Recent Files submenu
+    m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
+    for (int i = 0; i < MAX_RECENT_FILES; ++i) {
+        QAction *action = new QAction(this);
+        action->setVisible(false);
+        connect(action, &QAction::triggered, this, &MainWindow::openRecentFile);
+        m_recentFileActions.append(action);
+        m_recentFilesMenu->addAction(action);
+    }
+    m_recentFilesMenu->addSeparator();
+    m_clearRecentFilesAction = new QAction(tr("&Clear Recent Files"), this);
+    connect(m_clearRecentFilesAction, &QAction::triggered, this, &MainWindow::clearRecentFiles);
+    m_recentFilesMenu->addAction(m_clearRecentFilesAction);
+    
     fileMenu->addSeparator();
     fileMenu->addAction(m_saveAction);
     fileMenu->addAction(m_saveAsAction);
@@ -357,6 +545,8 @@ void MainWindow::setupMenuBar()
     viewMenu->addSeparator();
     viewMenu->addAction(m_wordWrapAction);
     viewMenu->addAction(m_lineNumbersAction);
+    viewMenu->addSeparator();
+    viewMenu->addAction(m_sessionRestoreAction);
     
     // Help Menu
     QMenu *helpMenu = menuBar->addMenu(tr("&Help"));
@@ -510,6 +700,12 @@ void MainWindow::createActions()
     m_lineNumbersAction->setStatusTip(tr("Toggle line numbers"));
     connect(m_lineNumbersAction, &QAction::triggered, this, &MainWindow::toggleLineNumbers);
     
+    m_sessionRestoreAction = new QAction(tr("&Restore Session on Startup"), this);
+    m_sessionRestoreAction->setCheckable(true);
+    m_sessionRestoreAction->setChecked(m_settingsManager->loadRestoreSession());
+    m_sessionRestoreAction->setStatusTip(tr("Automatically restore previous session when starting"));
+    connect(m_sessionRestoreAction, &QAction::triggered, this, &MainWindow::toggleSessionRestore);
+    
     m_preferencesAction = new QAction(tr("&Preferences..."), this);
     m_preferencesAction->setStatusTip(tr("Open preferences dialog"));
     connect(m_preferencesAction, &QAction::triggered, this, &MainWindow::showPreferences);
@@ -585,6 +781,29 @@ void MainWindow::updateStatusBar()
     }
 }
 
+void MainWindow::updateRecentFileActions()
+{
+    QStringList recentFiles = m_settingsManager->loadRecentFiles();
+    
+    int numRecentFiles = qMin(recentFiles.size(), MAX_RECENT_FILES);
+    
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = QString("&%1 %2").arg(i + 1).arg(QFileInfo(recentFiles[i]).fileName());
+        m_recentFileActions[i]->setText(text);
+        m_recentFileActions[i]->setData(recentFiles[i]);
+        m_recentFileActions[i]->setVisible(true);
+        m_recentFileActions[i]->setStatusTip(recentFiles[i]);
+    }
+    
+    for (int i = numRecentFiles; i < MAX_RECENT_FILES; ++i) {
+        m_recentFileActions[i]->setVisible(false);
+    }
+    
+    bool hasRecentFiles = !recentFiles.isEmpty();
+    m_recentFilesMenu->setEnabled(hasRecentFiles);
+    m_clearRecentFilesAction->setEnabled(hasRecentFiles);
+}
+
 bool MainWindow::maybeSave()
 {
     if (m_tabWidget->hasUnsavedChanges()) {
@@ -612,10 +831,32 @@ bool MainWindow::saveDocument(int index)
         return false;
     }
     
-    QFile file(editor->filePath());
+    QString filePath = editor->filePath();
+    
+    // Validate file path
+    if (!ErrorHandler::validateFilePath(this, filePath)) {
+        return false;
+    }
+    
+    // Check file permissions
+    if (!ErrorHandler::checkFilePermissions(this, filePath, true)) {
+        return false;
+    }
+    
+    // Estimate file size and check disk space
+    QString content = editor->toPlainText();
+    qint64 estimatedSize = content.toUtf8().size();
+    if (!ErrorHandler::checkDiskSpace(this, filePath, estimatedSize)) {
+        return false;
+    }
+    
+    QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, tr("Multi-Tab Editor"),
-            tr("Cannot write file %1:\n%2").arg(editor->filePath(), file.errorString()));
+        bool retry = ErrorHandler::handleFileError(this, filePath, file.errorString(),
+                                                  ErrorHandler::FileOperation::Saving);
+        if (retry) {
+            return saveDocument(index); // Retry
+        }
         return false;
     }
     
@@ -626,6 +867,7 @@ bool MainWindow::saveDocument(int index)
     m_tabWidget->setTabModified(index, false);
     
     m_settingsManager->addRecentFile(editor->filePath());
+    updateRecentFileActions();
     
     return true;
 }
@@ -640,5 +882,300 @@ void MainWindow::saveSettings()
 {
     m_settingsManager->saveWindowGeometry(saveGeometry());
     m_settingsManager->saveWindowState(saveState());
+}
+
+// Session Management
+void MainWindow::saveSession()
+{
+    if (!m_settingsManager->loadRestoreSession()) {
+        return;
+    }
+    
+    SessionData sessionData = getCurrentSession();
+    m_settingsManager->saveSession(sessionData);
+}
+
+void MainWindow::restoreSession()
+{
+    SessionData sessionData = m_settingsManager->loadSession();
+    
+    if (sessionData.tabs.isEmpty()) {
+        newFile();
+        return;
+    }
+    
+    // Restore all tabs
+    for (const SessionTab &tabData : sessionData.tabs) {
+        TextEditor *editor = new TextEditor(this);
+        
+        if (tabData.isUntitled) {
+            // Restore unsaved content
+            editor->setPlainText(tabData.content);
+            editor->setModified(tabData.isModified);
+            
+            QString tabTitle = tabData.untitledName.isEmpty() ? "Untitled" : tabData.untitledName;
+            int index = m_tabWidget->addTab(editor, tabTitle);
+            
+        } else if (!tabData.filePath.isEmpty() && QFile::exists(tabData.filePath)) {
+            // Restore saved file
+            QFile file(tabData.filePath);
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                QTextStream in(&file);
+                QString content = in.readAll();
+                editor->setPlainText(content);
+                editor->setFilePath(tabData.filePath);
+                editor->setModified(false);
+                
+                QFileInfo fileInfo(tabData.filePath);
+                int index = m_tabWidget->addTab(editor, fileInfo.fileName());
+            } else {
+                editor->deleteLater();
+                continue;
+            }
+        } else {
+            // File doesn't exist, restore as unsaved content if available
+            if (!tabData.content.isEmpty()) {
+                editor->setPlainText(tabData.content);
+                editor->setModified(true);
+                
+                QString fileName = QFileInfo(tabData.filePath).fileName();
+                if (fileName.isEmpty()) fileName = "Untitled";
+                int index = m_tabWidget->addTab(editor, fileName + " *");
+            } else {
+                editor->deleteLater();
+                continue;
+            }
+        }
+        
+        // Restore cursor position
+        QTextCursor cursor = editor->textCursor();
+        cursor.setPosition(qMin(tabData.cursorPosition, editor->document()->characterCount()));
+        editor->setTextCursor(cursor);
+    }
+    
+    // Restore current tab
+    if (sessionData.currentTabIndex >= 0 && sessionData.currentTabIndex < m_tabWidget->count()) {
+        m_tabWidget->setCurrentIndex(sessionData.currentTabIndex);
+    }
+    
+    updateActions();
+}
+
+SessionData MainWindow::getCurrentSession() const
+{
+    SessionData sessionData;
+    sessionData.currentTabIndex = m_tabWidget->currentIndex();
+    sessionData.restoreSession = m_settingsManager->loadRestoreSession();
+    
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        TextEditor *editor = m_tabWidget->editorAt(i);
+        if (!editor) continue;
+        
+        SessionTab tab;
+        tab.filePath = editor->filePath();
+        tab.content = editor->toPlainText();
+        tab.isModified = editor->isModified();
+        tab.cursorPosition = editor->textCursor().position();
+        tab.isUntitled = editor->filePath().isEmpty();
+        
+        if (tab.isUntitled) {
+            tab.untitledName = m_tabWidget->tabText(i);
+            // Remove " *" suffix if present
+            if (tab.untitledName.endsWith(" *")) {
+                tab.untitledName.chop(2);
+            }
+        }
+        
+        sessionData.tabs.append(tab);
+    }
+    
+    return sessionData;
+}
+
+void MainWindow::autoSaveAllTabs()
+{
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        TextEditor *editor = m_tabWidget->editorAt(i);
+        if (!editor || !editor->isModified()) continue;
+        
+        QString tabId;
+        if (editor->filePath().isEmpty()) {
+            // For untitled tabs, use a unique identifier
+            tabId = QString("untitled_%1").arg(i);
+        } else {
+            tabId = editor->filePath();
+        }
+        
+        m_settingsManager->saveAutoSaveContent(tabId, editor->toPlainText());
+    }
+    
+    // Also create crash recovery backup
+    createCrashRecoveryBackup();
+}
+
+void MainWindow::startAutoSaveTimer()
+{
+    m_autoSaveTimer = new QTimer(this);
+    connect(m_autoSaveTimer, &QTimer::timeout, this, &MainWindow::autoSaveAllTabs);
+    m_autoSaveTimer->start(AUTO_SAVE_INTERVAL);
+}
+
+void MainWindow::checkMemoryUsage()
+{
+    qint64 availableMemory = ErrorHandler::getAvailableMemory();
+    
+    if (availableMemory > 0 && availableMemory < 50 * 1024 * 1024) { // Less than 50MB
+        QMessageBox::warning(
+            this,
+            tr("Low Memory Warning"),
+            tr("System memory is critically low (%1 available).\n\n"
+               "Consider closing some files or applications to prevent data loss.")
+                .arg(ErrorHandler::formatFileSize(availableMemory))
+        );
+        
+        // Force auto-save all tabs
+        autoSaveAllTabs();
+    }
+}
+
+void MainWindow::createCrashRecoveryBackup()
+{
+    QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QString recoveryDir = QDir(tempDir).filePath("multi-tab-editor-recovery");
+    
+    QDir().mkpath(recoveryDir);
+    
+    // Save current session to recovery file
+    SessionData sessionData = getCurrentSession();
+    
+    QSettings recoverySettings(QDir(recoveryDir).filePath("recovery.ini"), QSettings::IniFormat);
+    recoverySettings.beginGroup("Recovery");
+    recoverySettings.setValue("timestamp", QDateTime::currentDateTime());
+    recoverySettings.setValue("currentTabIndex", sessionData.currentTabIndex);
+    
+    recoverySettings.beginWriteArray("tabs");
+    for (int i = 0; i < sessionData.tabs.size(); ++i) {
+        recoverySettings.setArrayIndex(i);
+        const SessionTab &tab = sessionData.tabs.at(i);
+        
+        recoverySettings.setValue("filePath", tab.filePath);
+        recoverySettings.setValue("isModified", tab.isModified);
+        recoverySettings.setValue("cursorPosition", tab.cursorPosition);
+        recoverySettings.setValue("isUntitled", tab.isUntitled);
+        recoverySettings.setValue("untitledName", tab.untitledName);
+        
+        // Save content to separate file
+        QString contentFile = QDir(recoveryDir).filePath(QString("tab_%1.txt").arg(i));
+        QFile file(contentFile);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << tab.content;
+        }
+        recoverySettings.setValue("contentFile", contentFile);
+    }
+    recoverySettings.endArray();
+    recoverySettings.endGroup();
+}
+
+void MainWindow::checkForCrashRecovery()
+{
+    QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QString recoveryDir = QDir(tempDir).filePath("multi-tab-editor-recovery");
+    QString recoveryFile = QDir(recoveryDir).filePath("recovery.ini");
+    
+    if (!QFile::exists(recoveryFile)) {
+        return;
+    }
+    
+    QSettings recoverySettings(recoveryFile, QSettings::IniFormat);
+    recoverySettings.beginGroup("Recovery");
+    QDateTime timestamp = recoverySettings.value("timestamp").toDateTime();
+    recoverySettings.endGroup();
+    
+    // Only offer recovery if the backup is recent (within last 24 hours)
+    if (timestamp.isValid() && timestamp.secsTo(QDateTime::currentDateTime()) < 86400) {
+        QMessageBox::StandardButton result = QMessageBox::question(
+            this,
+            tr("Crash Recovery"),
+            tr("It appears the application may have crashed previously.\n\n"
+               "A recovery file from %1 was found.\n\n"
+               "Do you want to restore your previous session?")
+                .arg(timestamp.toString()),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes
+        );
+        
+        if (result == QMessageBox::Yes) {
+            // Load recovery data
+            SessionData sessionData;
+            recoverySettings.beginGroup("Recovery");
+            sessionData.currentTabIndex = recoverySettings.value("currentTabIndex", 0).toInt();
+            
+            int size = recoverySettings.beginReadArray("tabs");
+            for (int i = 0; i < size; ++i) {
+                recoverySettings.setArrayIndex(i);
+                SessionTab tab;
+                
+                tab.filePath = recoverySettings.value("filePath").toString();
+                tab.isModified = recoverySettings.value("isModified", false).toBool();
+                tab.cursorPosition = recoverySettings.value("cursorPosition", 0).toInt();
+                tab.isUntitled = recoverySettings.value("isUntitled", false).toBool();
+                tab.untitledName = recoverySettings.value("untitledName").toString();
+                
+                // Load content from file
+                QString contentFile = recoverySettings.value("contentFile").toString();
+                if (QFile::exists(contentFile)) {
+                    QFile file(contentFile);
+                    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                        QTextStream in(&file);
+                        tab.content = in.readAll();
+                    }
+                }
+                
+                sessionData.tabs.append(tab);
+            }
+            recoverySettings.endArray();
+            recoverySettings.endGroup();
+            
+            // Restore the session
+            for (const SessionTab &tabData : sessionData.tabs) {
+                TextEditor *editor = new TextEditor(this);
+                editor->setPlainText(tabData.content);
+                
+                if (!tabData.filePath.isEmpty()) {
+                    editor->setFilePath(tabData.filePath);
+                }
+                
+                editor->setModified(tabData.isModified);
+                
+                QString tabTitle = tabData.isUntitled ? 
+                    (tabData.untitledName.isEmpty() ? "Untitled" : tabData.untitledName) :
+                    QFileInfo(tabData.filePath).fileName();
+                    
+                if (tabData.isModified) {
+                    tabTitle += " *";
+                }
+                
+                int index = m_tabWidget->addTab(editor, tabTitle);
+                
+                // Restore cursor position
+                QTextCursor cursor = editor->textCursor();
+                cursor.setPosition(qMin(tabData.cursorPosition, editor->document()->characterCount()));
+                editor->setTextCursor(cursor);
+                
+                // Connect file change detection
+                connect(editor, &TextEditor::fileChangedExternally, this, &MainWindow::onFileChangedExternally);
+            }
+            
+            // Restore current tab
+            if (sessionData.currentTabIndex >= 0 && sessionData.currentTabIndex < m_tabWidget->count()) {
+                m_tabWidget->setCurrentIndex(sessionData.currentTabIndex);
+            }
+        }
+    }
+    
+    // Clean up recovery files
+    QDir recoveryDirObj(recoveryDir);
+    recoveryDirObj.removeRecursively();
 }
 

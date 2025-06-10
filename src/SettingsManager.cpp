@@ -210,3 +210,107 @@ bool SettingsManager::loadSyntaxHighlighting() const
     return m_settings->value("syntaxHighlighting", true).toBool();
 }
 
+// Session Management
+void SettingsManager::saveSession(const SessionData &sessionData)
+{
+    m_settings->beginGroup("Session");
+    
+    m_settings->setValue("currentTabIndex", sessionData.currentTabIndex);
+    m_settings->setValue("restoreSession", sessionData.restoreSession);
+    
+    m_settings->beginWriteArray("tabs");
+    for (int i = 0; i < sessionData.tabs.size(); ++i) {
+        m_settings->setArrayIndex(i);
+        const SessionTab &tab = sessionData.tabs.at(i);
+        
+        m_settings->setValue("filePath", tab.filePath);
+        m_settings->setValue("content", tab.content);
+        m_settings->setValue("isModified", tab.isModified);
+        m_settings->setValue("cursorPosition", tab.cursorPosition);
+        m_settings->setValue("isUntitled", tab.isUntitled);
+        m_settings->setValue("untitledName", tab.untitledName);
+    }
+    m_settings->endArray();
+    
+    m_settings->endGroup();
+}
+
+SessionData SettingsManager::loadSession() const
+{
+    SessionData sessionData;
+    
+    m_settings->beginGroup("Session");
+    
+    sessionData.currentTabIndex = m_settings->value("currentTabIndex", 0).toInt();
+    sessionData.restoreSession = m_settings->value("restoreSession", true).toBool();
+    
+    int size = m_settings->beginReadArray("tabs");
+    sessionData.tabs.reserve(size);
+    
+    for (int i = 0; i < size; ++i) {
+        m_settings->setArrayIndex(i);
+        SessionTab tab;
+        
+        tab.filePath = m_settings->value("filePath").toString();
+        tab.content = m_settings->value("content").toString();
+        tab.isModified = m_settings->value("isModified", false).toBool();
+        tab.cursorPosition = m_settings->value("cursorPosition", 0).toInt();
+        tab.isUntitled = m_settings->value("isUntitled", false).toBool();
+        tab.untitledName = m_settings->value("untitledName").toString();
+        
+        sessionData.tabs.append(tab);
+    }
+    m_settings->endArray();
+    
+    m_settings->endGroup();
+    
+    return sessionData;
+}
+
+void SettingsManager::clearSession()
+{
+    m_settings->remove("Session");
+}
+
+void SettingsManager::saveRestoreSession(bool enabled)
+{
+    m_settings->setValue("restoreSession", enabled);
+    emit settingsChanged();
+}
+
+bool SettingsManager::loadRestoreSession() const
+{
+    return m_settings->value("restoreSession", true).toBool();
+}
+
+// Auto-save for unsaved files
+void SettingsManager::saveAutoSaveContent(const QString &tabId, const QString &content)
+{
+    m_settings->beginGroup("AutoSave");
+    m_settings->setValue(tabId, content);
+    m_settings->endGroup();
+}
+
+QString SettingsManager::loadAutoSaveContent(const QString &tabId) const
+{
+    m_settings->beginGroup("AutoSave");
+    QString content = m_settings->value(tabId).toString();
+    m_settings->endGroup();
+    return content;
+}
+
+void SettingsManager::clearAutoSaveContent(const QString &tabId)
+{
+    m_settings->beginGroup("AutoSave");
+    m_settings->remove(tabId);
+    m_settings->endGroup();
+}
+
+QStringList SettingsManager::getAutoSaveFiles() const
+{
+    m_settings->beginGroup("AutoSave");
+    QStringList keys = m_settings->childKeys();
+    m_settings->endGroup();
+    return keys;
+}
+

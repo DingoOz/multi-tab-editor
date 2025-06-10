@@ -28,6 +28,7 @@ TextEditor::TextEditor(QWidget *parent)
     , m_syntaxHighlighter(nullptr)
     , m_completer(nullptr)
     , m_cursorTimer(nullptr)
+    , m_fileWatcher(nullptr)
 {
     setupEditor();
     setupSyntaxHighlighter();
@@ -38,6 +39,10 @@ TextEditor::TextEditor(QWidget *parent)
     connect(verticalScrollBar(), &QScrollBar::valueChanged, this, [this]() { m_lineNumberArea->update(); });
     connect(this, &QTextEdit::cursorPositionChanged, this, &TextEditor::onCursorPositionChanged);
     connect(this, &QTextEdit::textChanged, this, &TextEditor::onTextChanged);
+    
+    // File change detection
+    m_fileWatcher = new QFileSystemWatcher(this);
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, &TextEditor::onFileChanged);
     
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -78,7 +83,19 @@ void TextEditor::setupSyntaxHighlighter()
 
 void TextEditor::setFilePath(const QString &filePath)
 {
+    // Remove previous file from watcher
+    if (!m_filePath.isEmpty()) {
+        m_fileWatcher->removePath(m_filePath);
+    }
+    
     m_filePath = filePath;
+    
+    // Add new file to watcher and store last modified time
+    if (!filePath.isEmpty() && QFile::exists(filePath)) {
+        m_fileWatcher->addPath(filePath);
+        QFileInfo fileInfo(filePath);
+        m_lastModified = fileInfo.lastModified();
+    }
     
     // Auto-detect language from file extension
     if (!filePath.isEmpty()) {
@@ -332,6 +349,29 @@ void TextEditor::onTextChanged()
     if (!m_modified) {
         setModified(true);
     }
+}
+
+void TextEditor::onFileChanged(const QString &path)
+{
+    if (path != m_filePath) {
+        return;
+    }
+    
+    // Check if file still exists
+    QFileInfo fileInfo(path);
+    if (!fileInfo.exists()) {
+        emit fileChangedExternally(path);
+        return;
+    }
+    
+    // Check if modification time has actually changed
+    QDateTime newModified = fileInfo.lastModified();
+    if (newModified == m_lastModified) {
+        return;
+    }
+    
+    m_lastModified = newModified;
+    emit fileChangedExternally(path);
 }
 
 void TextEditor::autoIndent()
