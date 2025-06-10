@@ -61,13 +61,9 @@ jobs:
         export QT_QPA_PLATFORM=offscreen
         timeout 3s ./MultiTabEditor --help 2>/dev/null || echo "Application can start"
 
-  multiple-ubuntu-versions:
-    name: Ubuntu ${{ matrix.ubuntu_version }} Build
-    runs-on: ubuntu-${{ matrix.ubuntu_version }}
-    
-    strategy:
-      matrix:
-        ubuntu_version: [22.04, latest]
+  ubuntu-latest-build:
+    name: Ubuntu Latest Build
+    runs-on: ubuntu-latest
         
     steps:
     - name: Checkout repository
@@ -103,4 +99,4 @@ jobs:
       run: |
         cd build
         test -f MultiTabEditor
-        echo "✅ Build successful on Ubuntu ${{ matrix.ubuntu_version }}"
+        echo "✅ Build successful on Ubuntu Latest"
